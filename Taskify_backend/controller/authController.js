@@ -37,12 +37,10 @@ exports.register = async (req, res, next) => {
       // Continue with registration even if email fails
     }
 
-    // Return success without sending token
-    // This forces user to verify email or login separately
     res.status(201).json({
       success: true,
       message: "Registration successful! Please check your email to verify your account.",
-      // Don't include token here to force login after registration
+    
     })
   } catch (error) {
     next(error)
@@ -99,14 +97,7 @@ exports.login = async (req, res, next) => {
       })
     }
 
-    // Check if user is verified - REMOVED THIS CHECK TO ALLOW IMMEDIATE LOGIN
-    // if (!user.isVerified) {
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: 'Please verify your email before logging in'
-    //   });
-    // }
-
+  
     // Generate JWT
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "30d",
