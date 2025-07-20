@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create a custom axios instance with default configuration
 const api = axios.create({
-  baseURL: process.env.VITE_API_URL || "https://taskify-backend-aqoy.onrender.com/",
+  baseURL: import.meta.env.VITE_API_URL || "https://taskify-backend-aqoy.onrender.com",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
