@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const googleLogin = () => {
-  window.location.href = `https://taskify-backend-aqoy.onrender.com/api/auth/google`;
+  window.location.href = `${import.meta.env.VITE_CLIENT_URL}/api/auth/google`;
 };
 
 
