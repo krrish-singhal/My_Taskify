@@ -76,10 +76,9 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  
   const googleLogin = () => {
-    const apiBase = import.meta.env.VITE_API_URL.replace(/\/+$/, ""); // removes trailing slashes
-window.location.href = `${apiBase}/api/auth/google`;
+    const apiBase = import.meta.env.VITE_CLIENT_URL.replace(/\/+$/, ""); // removes trailing slashes
+    window.location.href = `${apiBase}/api/auth/google`;
   }
 
   const guestLogin = async () => {
