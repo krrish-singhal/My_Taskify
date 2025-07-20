@@ -10,21 +10,21 @@ router.use(protect)
 router.get("/", taskController.getTasks)
 
 // Get task statistics
-router.get("/stats", taskController.getTaskStats)
+router.get("/stats", protect, taskController.getTaskStats)
 
 // Get overdue tasks
-router.get("/overdue", taskController.getOverdueTasks)
+router.get("/overdue", protect, taskController.getOverdueTasks)
 
 // Create a new task
-router.post("/", taskController.createTask)
+router.post("/", protect, taskController.createTask)
 
 // Get, update, delete a task
-router.get("/:id", taskController.getTask)
-router.put("/:id", taskController.updateTask)
-router.delete("/:id", taskController.deleteTask)
+router.get("/:id", protect, taskController.getTask)
+router.put("/:id", protect, taskController.updateTask)
+router.delete("/:id", protect, taskController.deleteTask)
 
 // Subtasks
-router.post("/:id/subtasks", taskController.addSubtask)
-router.put("/:id/subtasks/:subtaskId", taskController.updateSubtask)
+router.post("/:id/subtasks", protect, taskController.addSubtask)
+router.put("/:id/subtasks/:subtaskId", protect, taskController.updateSubtask)
 
 module.exports = router
