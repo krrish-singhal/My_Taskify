@@ -26,3 +26,4 @@ node_modules/
 /Taskify_backend/node_modules
 .env
 /Taskify_backend/.env
+.vercel

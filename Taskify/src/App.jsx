@@ -50,17 +50,38 @@ function App() {
       <Toaster position="top-right" />
       <Routes>
         {/* Auth Routes - Accessible only when not logged in */}
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-        <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
-        <Route path="/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/" />} />
-        <Route path="/reset-password/:token" element={!user ? <ResetPassword /> : <Navigate to="/" />} />
+        <Route
+          path="/login"
+          element={!user ? <Login /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/register"
+          element={!user ? <Register /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/forgot-password"
+          element={!user ? <ForgotPassword /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            loading ? (
+              <LoadingScreen />
+            ) : !user ? (
+              <ResetPassword />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
 
         {/* Protected Routes - Require authentication */}
         <Route element={user ? <Layout /> : <Navigate to="/login" />}>
           <Route path="/" element={<Dashboard />} />
-          
+
           {/* Task Routes */}
           <Route path="/tasks" element={<AllTasks />} />
           <Route path="/tasks/today" element={<TodayTasks />} />
@@ -70,7 +91,7 @@ function App() {
           <Route path="/tasks/new" element={<CreateTask />} />
           <Route path="/tasks/:id" element={<TaskDetail />} />
           <Route path="/tasks/:id/edit" element={<EditTask />} />
-          
+
           {/* User Routes */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
@@ -80,7 +101,7 @@ function App() {
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-  </>
+    </>
   );
 }
 

@@ -37,19 +37,25 @@ const ResetPassword = () => {
       return
     }
 
-    try {
-      await resetPassword(token, password)
-      setSuccess(true)
-      setError("")
-      toast.success("Password reset successful! You can now log in with your new password.")
-      setTimeout(() => {
-        navigate("/login")
-      }, 3000)
-    } catch (error) {
-      console.error("Reset password error:", error)
-      setError(error.response?.data?.message || "Failed to reset password. The token may be invalid or expired.")
-      toast.error(error.response?.data?.message || "Failed to reset password")
-    }
+   try {
+  const result = await resetPassword(token, password)
+  
+  if (result?.success || result?.status === 200) {
+    setSuccess(true)
+    setError("")
+    toast.success("Password reset successful! You can now log in with your new password.")
+    setTimeout(() => {
+      navigate("/login")
+    }, 3000)
+  } else {
+    throw new Error("Unexpected response from server.")
+  }
+} catch (error) {
+  console.error("Reset password error:", error)
+  setSuccess(false)
+  setError(error?.response?.data?.message || error?.message || "Failed to reset password. Token may be expired.")
+  toast.error(error?.response?.data?.message || "Failed to reset password")
+}
   }
 
   return (

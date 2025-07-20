@@ -1,38 +1,41 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { Link, useParams, useNavigate } from "react-router-dom"
-import axios from "axios"
-import { CheckCircle, XCircle, ArrowLeft } from "lucide-react"
-import Logo from "../../components/Logo"
+import { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CheckCircle, XCircle, ArrowLeft } from "lucide-react";
+import Logo from "../../components/Logo";
 
 const VerifyEmail = () => {
-  const [status, setStatus] = useState("loading") // loading, success, error
-  const [message, setMessage] = useState("")
-  const { token } = useParams()
-  const navigate = useNavigate()
+  const [status, setStatus] = useState("loading"); // loading, success, error
+  const [message, setMessage] = useState("");
+  const { token } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(`/api/auth/verify/${token}`)
-        setStatus("success")
-        setMessage(response.data.message || "Email verified successfully! You can now log in.")
+        const response = await axios.get(
+          `/api/auth/verify/${token}`,
+          { withCredentials: true }
+        );
+        setStatus("success");
+        setMessage(response.data.message || "Email verified successfully! You can now log in.");
 
         // Redirect to login after 3 seconds
         setTimeout(() => {
-          navigate("/login")
-        }, 3000)
+          navigate("/login");
+        }, 2000);
       } catch (error) {
-        setStatus("error")
+        console.error("Verification error:", error);
+        setStatus("error");
         setMessage(
-          error.response?.data?.message || "Failed to verify email. The verification link may be invalid or expired.",
-        )
+          error.response?.data?.message ||
+            "Failed to verify email. The verification link may be invalid or expired."
+        );
       }
-    }
+    };
 
-    verifyEmail()
-  }, [token, navigate])
+    verifyEmail();
+  }, [token, navigate]);
 
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
@@ -87,7 +90,7 @@ const VerifyEmail = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VerifyEmail
+export default VerifyEmail;

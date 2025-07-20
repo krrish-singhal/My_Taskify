@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [authError, setAuthError] = useState(null)
 
-  // Check if user is logged in
   const checkAuthStatus = useCallback(async () => {
     try {
       setLoading(true)
@@ -21,18 +20,15 @@ export const AuthProvider = ({ children }) => {
 
       if (!token) {
         setUser(null)
-        setLoading(false)
         return
       }
 
-      try {
-        const response = await axios.get("/api/users/me")
-        setUser(response.data.user)
-      } catch (error) {
-        console.error("Auth status check error:", error)
-        localStorage.removeItem("token")
-        setUser(null)
-      }
+      const response = await axios.get(`/api/users/me`)
+      setUser(response.data.user)
+    } catch (error) {
+      console.error("Auth status check error:", error)
+      localStorage.removeItem("token")
+      setUser(null)
     } finally {
       setLoading(false)
     }
@@ -42,12 +38,11 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus()
   }, [checkAuthStatus])
 
-  // Register
   const register = async (userData) => {
     setLoading(true)
     setAuthError(null)
     try {
-      const response = await axios.post("/api/auth/register", userData)
+      const response = await axios.post(`/api/auth/register`, userData)
       toast.success(response.data.message || "Registration successful!")
       return response.data
     } catch (error) {
@@ -61,16 +56,12 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Login
   const login = async (credentials) => {
     setLoading(true)
     setAuthError(null)
     try {
-      const response = await axios.post("/api/auth/login", credentials)
-
-      // Save token to localStorage
+      const response = await axios.post(`/api/auth/login`, credentials)
       localStorage.setItem("token", response.data.token)
-
       setUser(response.data.user)
       toast.success("Login successful!")
       return response.data
@@ -85,22 +76,16 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Google Login/Register
   const googleLogin = () => {
-    // Redirect to Google OAuth endpoint
     window.location.href = `${axios.defaults.baseURL}/api/auth/google`
   }
 
-  // Guest Login
   const guestLogin = async () => {
     setLoading(true)
     setAuthError(null)
     try {
-      const response = await axios.post("/api/auth/guest")
-
-      // Save token to localStorage
+      const response = await axios.post(`/api/auth/guest`)
       localStorage.setItem("token", response.data.token)
-
       setUser(response.data.user)
       toast.success("Welcome, Guest!")
       return response.data
@@ -115,22 +100,16 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Logout
   const logout = async () => {
     setLoading(true)
     try {
-      await axios.post("/api/auth/logout")
-
-      // Remove token from localStorage
+      await axios.post(`/api/auth/logout`)
       localStorage.removeItem("token")
-
       setUser(null)
       toast.success("Logged out successfully")
     } catch (error) {
       console.error("Logout error:", error)
       toast.error("Logout failed")
-
-      // Even if the server request fails, clear local storage
       localStorage.removeItem("token")
       setUser(null)
     } finally {
@@ -138,12 +117,11 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Forgot Password
   const forgotPassword = async (email) => {
     setLoading(true)
     setAuthError(null)
     try {
-      const response = await axios.post("/api/auth/forgot-password", { email })
+      const response = await axios.post(`/api/auth/forgot-password`, { email })
       toast.success(response.data.message || "Password reset email sent!")
       return response.data
     } catch (error) {
@@ -157,30 +135,36 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Reset Password
-  const resetPassword = async (token, password) => {
-    setLoading(true)
-    setAuthError(null)
-    try {
-      const response = await axios.post(`/api/auth/reset-password/${token}`, { password })
-      toast.success(response.data.message || "Password reset successful!")
-      return response.data
-    } catch (error) {
-      console.error("Reset password error:", error)
-      const errorMessage = error.response?.data?.message || "Failed to reset password"
-      setAuthError(errorMessage)
-      toast.error(errorMessage)
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }
+const resetPassword = async (token, password) => {
+  setLoading(true);
+  setAuthError(null);
 
-  // Update Profile
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/reset-password/' + token, { password });
+
+
+    // Check if the response contains expected success message
+    if (response.status === 200 && response.data?.message) {
+      return response.data;
+    } else {
+      // If API returns 200 but message is empty or unexpected
+      throw new Error("Unexpected response from server");
+    }
+  } catch (error) {
+    console.error("Reset password error:", error);
+    const errorMessage = error.response?.data?.message || "Failed to reset password";
+    setAuthError(errorMessage);
+    throw new Error(errorMessage);  // Let ResetPassword.jsx handle toast
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   const updateProfile = async (userData) => {
     setLoading(true)
     try {
-      const response = await axios.put("/api/users/profile", userData)
+      const response = await axios.put(`/api/users/profile`, userData)
       setUser(response.data.user)
       toast.success("Profile updated successfully")
       return response.data
@@ -193,11 +177,10 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Change Password
   const changePassword = async (passwordData) => {
     setLoading(true)
     try {
-      const response = await axios.post("/api/auth/change-password", passwordData)
+      const response = await axios.post(`/api/auth/change-password`, passwordData)
       toast.success(response.data.message || "Password changed successfully")
       return response.data
     } catch (error) {
@@ -227,5 +210,3 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
-
-export { AuthContext }
