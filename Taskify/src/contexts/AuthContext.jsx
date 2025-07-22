@@ -77,9 +77,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   const googleLogin = () => {
-    const apiBase = import.meta.env.VITE_CLIENT_URL.replace(/\/+$/, ""); // removes trailing slashes
-    window.location.href = `https://taskify-backend-aqoy.onrender.com/api/auth/google`;
-  }
+  window.location.href = "https://taskify-backend-aqoy.onrender.com/api/auth/google";
+};
+
 
   const guestLogin = async () => {
     setLoading(true)
