@@ -141,11 +141,11 @@ const resetPassword = async (token, password) => {
     const response = await axios.post('http://localhost:5000/api/auth/reset-password/' + token, { password });
 
 
-    // Check if the response contains expected success message
+    
     if (response.status === 200 && response.data?.message) {
       return response.data;
     } else {
-      // If API returns 200 but message is empty or unexpected
+      
       throw new Error("Unexpected response from server");
     }
   } catch (error) {
