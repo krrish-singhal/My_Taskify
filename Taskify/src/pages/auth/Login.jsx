@@ -52,15 +52,7 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      googleLogin();
-      // Redirect happens in the googleLogin function
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
-  };
-
+  
   const handleGuestLogin = async () => {
     try {
       await guestLogin();
