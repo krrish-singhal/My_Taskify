@@ -196,7 +196,7 @@ const resetPassword = async (token, password) => {
     authError,
     register,
     login,
-    googleLogin,
+   
     guestLogin,
     logout,
     forgotPassword,
