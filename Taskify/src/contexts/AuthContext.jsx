@@ -138,10 +138,8 @@ const resetPassword = async (token, password) => {
   setAuthError(null);
 
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/reset-password/' + token, { password });
-
-
-    
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`, { password });
+    toast.success(response.data.message || "Password reset successfully!");
     if (response.status === 200 && response.data?.message) {
       return response.data;
     } else {

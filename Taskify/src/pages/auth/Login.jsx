@@ -52,7 +52,15 @@ const Login = () => {
     }
   };
 
-  
+  const handleGoogleLogin = async () => {
+    try {
+      await googleLogin();
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
+  };
+
   const handleGuestLogin = async () => {
     try {
       await guestLogin();
