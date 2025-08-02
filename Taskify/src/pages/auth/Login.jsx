@@ -53,7 +53,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = async () => {
-    window.location.href = "https://taskify-backend-aqoy.onrender.com/auth/google/callback";
+    googleLogin();
   };
 
   const handleGuestLogin = async () => {
