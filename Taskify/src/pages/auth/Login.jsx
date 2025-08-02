@@ -53,12 +53,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = async () => {
-    try {
-      await googleLogin();
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
+    window.location.href = "https://taskify-backend-aqoy.onrender.com/auth/google/callback";
   };
 
   const handleGuestLogin = async () => {
