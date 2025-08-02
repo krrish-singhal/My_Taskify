@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
   const googleLogin = () => {
     // Redirect to Google OAuth endpoint
     const backendUrl = import.meta.env.VITE_API_URL || "https://taskify-backend-aqoy.onrender.com";
-    window.location.href = `${backendUrl}/api/auth/google`;
+    window.location.href = `${backendUrl}api/auth/google`;
   }
 
   const guestLogin = async () => {
